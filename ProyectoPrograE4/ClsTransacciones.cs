@@ -24,8 +24,8 @@ namespace ProyectoPrograE4
         {
             Console.Clear();
             for (int i = 0; i < numPlaca.Length; i++)
-           //bucle que recorre la longitud de uno de los vectores, para asi utilizar la variable de control [I] para
-           //formatear los demás vectores.
+            //bucle que recorre la longitud de uno de los vectores, para asi utilizar la variable de control [I] para
+            //formatear los demás vectores.
             {
                 numPlaca[i] = "";
                 numFactura[i] = 0;
@@ -39,7 +39,7 @@ namespace ProyectoPrograE4
                 contador = 0;
             }
             Console.WriteLine("\n\n\t ╔═══════════════════════════════════════════════════╗");
-            Console.WriteLine("\t ║       !VECTORES RESTABLECIDOS CON EXITO!          ║");
+            Console.WriteLine("\t ║       ¡VECTORES RESTABLECIDOS CON EXITO!          ║");
             Console.WriteLine("\t ╚═══════════════════════════════════════════════════╝");
         }
         public static void agregarVehiculos()//Agrega nuevo vehiculos que pasen por el peaje.
@@ -204,26 +204,38 @@ namespace ProyectoPrograE4
                     }
                 } while (!CasetaValida);
 
-                Console.ForegroundColor = ConsoleColor.White; Console.Write("\nMonto con el paga (cliente): ");
-                montoCliente[contador] = int.Parse(Console.ReadLine());
-
-                if (montoCliente[contador] < montoCancelar[contador])//se solicita el monto con el que se va a pagar y en caso de que sea inferior a la tarifa se elimina esa posicion del arreglo.
+                bool montoValido = false;
+                int monto;
+                do
                 {
-                    Console.Clear(); Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\n\t -- ERROR 101 - Error con el monto a pagar --");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("El monto ingresado es inferior al que debe cancelar, intentalo de nuevo.");
-                    numFactura[contador] = 0;
-                    numPlaca[contador] = "";
-                    numCaseta[contador] = 0;
-                    fecha[contador] = "";
-                    hora[contador] = "";
-                    montoCancelar[contador] = 0;
-                    montoCliente[contador] = 0;
-                    vuelto[contador] = 0;
-                    contador -= 1;
-                    break;
-                }
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("\n\t ╔════════════════════════════╗");
+                    Console.WriteLine($"\t     MONTO A CANCELAR = {montoCancelar[contador]}");
+                    Console.WriteLine("\t ╚════════════════════════════╝");
+                    Console.ForegroundColor = ConsoleColor.White; Console.Write("\nMonto con el que paga (cliente): ");
+                    monto = int.Parse(Console.ReadLine());
+                    if (monto >= montoCancelar[contador])
+                    {
+                        montoCliente[contador] = monto;
+                        vuelto[contador] = monto - montoCancelar[contador];
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("\n\t ╔══════════════════════════════════════════╗");
+                        Console.WriteLine("\t ║         PAGO REALIZADO CON EXITO         ║");
+                        Console.WriteLine("\t ╚══════════════════════════════════════════╝");
+                        Console.ReadLine();
+                        montoValido = true;
+                    }
+                    else if (montoCliente[contador] < montoCancelar[contador])
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\n\t -- ERROR 101 - Error con el monto a pagar --");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine("El monto ingresado es inferior al que debe cancelar, intentalo de nuevo.");
+                        Console.ReadLine();
+                    }
+                } while (!montoValido);
+
                 vuelto[contador] = montoCliente[contador] - montoCancelar[contador];
                 contador += 1;
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -232,42 +244,88 @@ namespace ProyectoPrograE4
                 op = Console.ReadLine().ToLower();//Se utiliza un contador, además, de una variable con la capacidad para no perder la cantidad de vehiculos que ya han cruzado por el peaje y asi saber cuando llegue a su límite.
             } while (op == "si" && contador < capacidad);
         }
+
+
         public static void consulta()
         {
             Boolean Existe = false;
-            Console.Write("Digite el numero de placa que desea consultar: "); string placa = Console.ReadLine();
-
-            for (int i = 0; i < 15; i++)
+            string op = "";
+            Console.Clear();
+            for (int i = 0; i < numPlaca.Length; i++)
             {
-                if (numPlaca[i].Equals(placa))
+                if (!numPlaca.Equals(" "))
                 {
-                    Console.Clear();
-
-                    Console.WriteLine("Esta es la información de "+numPlaca[i]);
-                    Console.WriteLine("Fecha: "+fecha[i]);
-                    Console.WriteLine("Hora: " + hora[i]);
-                    Console.WriteLine("Tipo de Vehiculo: " + tipoVehiculo[i]);
-                    Console.WriteLine("Peaje: " + tipoVehiculo[i]);
-                    Existe = true;
-                    break;
+                    Console.WriteLine(numPlaca[i]);
                 }
-
-            }
-            if (Existe == false)
+            } 
+            do
             {
-                Console.Clear();
-                Console.WriteLine("Placa no existe");
-            }
+              
+                do
+                {
+                    Console.Write("\n Digite el numero de placa que desea consultar: ");
+                    Console.Write(" → "); string placa = Console.ReadLine();
+
+                    for (int i = 0; i < numPlaca.Count(); i++)
+                    {
+                        Console.Clear();
+
+                        if (numPlaca[i].Equals(placa))
+                        {
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("\n\t ╔══════════════════════════════╗");
+                            Console.WriteLine($"\t     Información de  {numPlaca[i]}  ");
+                            Console.WriteLine("\t ╚═══════════════════════════════╝\n");
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("\t ═══════════════════════════════════════\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine($"║ Fecha:              {fecha[i]}");
+                            Console.WriteLine($"║ Hora:               {hora[i]}"); ;
+                            Console.WriteLine($"║ Tipo de Vehiculo:   {tipoVehiculo[i]}");
+                            Console.WriteLine($"║ Peaje:              {montoCancelar[i]}");
+                            Console.WriteLine($"║ Caseta:             { numCaseta[i]}");
+                            Console.ForegroundColor = ConsoleColor.DarkYellow;
+                            Console.WriteLine("\t ═══════════════════════════════════════\n");
+                            Console.ForegroundColor = ConsoleColor.White;
+
+                            Existe = true;
+                            break;
+
+                        }
+                                 
+                    }
+                    if (Existe == false)
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\n\t -- ERROR 300 - Error con el numero de placa consultado --");
+                        Console.WriteLine("Placa no existe, intente de nuevo");
+                        Console.ReadLine();
+                    }
+                } while (Existe);
+
+            Console.Clear();
+            Console.Write("\n¿Desea continuar? (si/no)\n → ");
+            op = Console.ReadLine().ToLower();
+            Console.ReadLine();
+            } while (op == "si");
             Console.ReadLine();
         }
-       
+
         public static void Modificar()
         {
-            int Placa;
+            string Placa;
             int montoPago;
             Boolean Existe = false;
+            for (int i = 0; i < numPlaca.Length; i++)
+            {
+                if (!numPlaca.Equals(" "))
+                {
+                    Console.WriteLine(numPlaca[i]);
+                }
+            }
             Console.WriteLine("Digite el numero de placa que desea consultar: ");
-            Placa = int.Parse(Console.ReadLine());
+            Console.WriteLine(" → "); Placa = Console.ReadLine();
             string op;
 
             for (int i = 0; i < 15; i++)
@@ -278,10 +336,10 @@ namespace ProyectoPrograE4
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("\n\t ╔══════════════════════════╗");
-                        Console.WriteLine("\t ║  1- Placa                 ║  ");
-                        Console.WriteLine("\t ║  2- Tipo de vehículo      ║ ");
+                        Console.WriteLine("\t ║ 1- Placa                  ║  ");
+                        Console.WriteLine("\t ║ 2- Tipo de vehículo       ║ ");
                         Console.WriteLine("\t ║ 3- Caseta                 ║ ");
-                        Console.WriteLine("\t ║ 4- Salir                  ║ "); 
+                        Console.WriteLine("\t ║ 4- Salir                  ║ ");
                         Console.WriteLine("\t ╚═══════════════════════════╝");
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("Digite la opcion que desea modificar: ");
@@ -325,16 +383,18 @@ namespace ProyectoPrograE4
 
         }
         public static void Reporte()
-        {    
+        {
             Console.Clear();
-            Console.WriteLine("********* REPORTE DE VEHICULOS *************");
+            Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine("\n\t\t\t\tTítulo del Reporte\n");
+            Console.WriteLine($" N factura    placa      tipo de vehiculo     caseta      monto pagar     paga con    vuelto");
+            Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine(" ═══════════════════════════════════════════════════════════════════════════════════════════");
             for (int j = 0; j < numPlaca.Length; j++)
             {
-                Console.WriteLine($"Placa: {numPlaca[j]} Factura: {numFactura[j]} Fecha: {fecha[j]} Hora: {hora[j]} Tarifa: {montoCancelar[j]} Monto cliente: {montoCliente[j]} Vuelto: {vuelto[j]}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"  {numFactura[j]}       {numPlaca[j]}         {tipoVehiculo[j]}     {numCaseta[j]}      {montoCancelar[j]}     {montoCliente[j]}    {vuelto[j]}");
             }
-            Console.WriteLine("********** Fin del reporte*************");
+            Console.ForegroundColor = ConsoleColor.Cyan; Console.WriteLine(" ═══════════════════════════════════════════════════════════════════════════════════════════");
             Console.Read();
         }
-        
     }
- }
+}
