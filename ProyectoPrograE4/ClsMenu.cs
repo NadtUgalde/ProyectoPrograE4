@@ -38,8 +38,8 @@ namespace ProyectoPrograE4
                     case "1": ClsTransacciones.inicializarV(); break;
                     case "2": ClsTransacciones.agregarVehiculos(); break;
                     case "3": ClsTransacciones.consulta(); break;
-                    case "4": ClsTransacciones.Modificar(); break;
-                    case "5": ClsTransacciones.Reporte(); break;
+                    case "4": ClsTransacciones.modificar(); break;
+                    case "5": ClsTransacciones.reporte(); break;
                     case "6":
                         Console.Clear();
                         Console.WriteLine("\n\n\t ╔═════════════════════════════════════╗");
