@@ -8,6 +8,7 @@ namespace ProyectoPrograE4
 {
     internal class ClsTransacciones
     {
+        //hola
         private static float[] numFactura = new float[15];
         private static string[] numPlaca = new string[15];
         private static string[] fecha = new string[15];
